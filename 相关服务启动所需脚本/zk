@@ -1,0 +1,25 @@
+#!/bin/bash
+
+case $1 in
+"start"){
+	for((host=101;host<104;host++));
+	do
+        echo ---------- zookeeper $host 启动 ------------
+		ssh hadoop$host "/export/servers/zookeeper-3.5.7/bin/zkServer.sh start"
+	done
+};;
+"stop"){
+	for((host=101;host<104;host++));
+	do
+        echo ---------- zookeeper $host 停止 ------------
+		ssh hadoop$host "/export/servers/zookeeper-3.5.7/bin/zkServer.sh stop"
+	done
+};;
+"status"){
+	for((host=101;host<104;host++));
+	do
+        echo ---------- zookeeper $host 状态 ------------
+		ssh hadoop$host "/export/servers/zookeeper-3.5.7/bin/zkServer.sh status"
+	done
+};;
+esac

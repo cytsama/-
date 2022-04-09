@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# 执行jps命令查询每台服务器上的节点状态
+echo =========集群节点状态==========
+
+for((host=101;host<104;host++));
+do
+echo -----------hadoop$host-------------
+	ssh hadoop$host "/export/servers/jdk1.8.0_212/bin/jps"
+done

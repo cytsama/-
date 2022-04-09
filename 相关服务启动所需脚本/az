@@ -1,0 +1,66 @@
+#!/bin/bash
+case $1 in
+"start")
+  for((host=101; host<104; host++))
+  do
+    echo "======start  hadoop$host azkaban-exec-server======"
+    ssh hadoop$host "cd /export/servers/azkaban/azkaban-exec-3.84.4/;bin/start-exec.sh"
+    sleep 5s
+    ssh hadoop$host "cd /export/servers/azkaban/azkaban-exec-3.84.4/;curl -G \"hadoop$host:\$(<./executor.port)/executor?action=activate\" && echo"
+  done
+  ssh hadoop101 "cd /export/servers/azkaban/azkaban-web-3.84.4/;bin/start-web.sh"
+;;
+"stop")
+  ssh hadoop101 "cd /export/servers/azkaban/azkaban-web-3.84.4/;bin/shutdown-web.sh"
+  for((host=101; host<104; host++))
+  do
+    echo "======stop hadoop$host azkaban-exec-server"
+    ssh hadoop$host "cd /export/servers/azkaban/azkaban-exec-3.84.4/;bin/shutdown-exec.sh"
+  done
+;;
+*)
+  echo "你输的啥玩意"
+esac
+##!/bin/bash
+#start-web(){
+#	for i in hadoop101;
+#	do
+#		ssh $i "cd /export/servers/azkaban/azkaban-web-3.84.4;bin/start-web.sh"
+#	done
+#}
+#stop-web(){
+#	for i in hadoop101;
+#	do
+#		ssh $i "cd /export/servers/azkaban/azkaban-web-3.84.4;bin/shutdown-web.sh"
+#	done
+#}
+#start-exec(){
+#	for i in hadoop101 hadoop102 hadoop103;
+#	do
+#		ssh $i "cd /export/servers/azkaban/azkaban-exec-3.84.4;bin/start-exec.sh"
+#	done
+#}
+#a-exec(){
+#	for i in hadoop101 hadoop102 hadoop103;
+#	do
+#		ssh $i "cd /export/servers/azkaban/azkaban-exec-3.84.4;curl -G  "$i:$(<./executor.port)/executor?action=activate" && echo"
+#	done
+#}
+#stop-exec(){
+#	for i in hadoop101 hadoop102 hadoop103;
+#	do
+#		ssh $i "/export/servers/azkaban/azkaban-exec-3.84.4/bin/shutdown-exec.sh"
+#	done
+#}
+#case $1 in
+#	start-exec)
+#		start-exec;;
+#	a-exec)
+#		a-exec;;
+#	stop-exec)
+#		stop-exec;;
+#	start-web)
+#		start-web;;
+#	stop-web)
+#		stop-web;;
+#esac

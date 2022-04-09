@@ -1,0 +1,7 @@
+#!/bin/bash
+echo =========日志生成==========
+for((host=101;host<103;host++));
+do
+echo -----------hadoop$host-------------
+	ssh hadoop$host "cd /export/servers/applog; java -jar gmall2020-mock-log-2021-01-22.jar >/dev/null 2>&1 &"
+done

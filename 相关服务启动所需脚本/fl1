@@ -1,0 +1,19 @@
+#! /bin/bash
+
+case $1 in
+"start"){
+        for((host=101;host<103;host++));
+        do
+                echo " --------启动 hadoop$host 采集flume-------"
+                ssh hadoop$host "nohup /export/servers/flume-1.9.0/bin/flume-ng agent --conf-file /export/servers/flume-1.9.0/conf/file-flume-kafka.conf --name a1 -Dflume.root.logger=INFO,LOGFILE >/export/servers/flume-1.9.0/log.txt 2>&1  &"
+        done
+};;	
+"stop"){
+        for((host=101;host<103;host++));
+        do
+                echo " --------停止 hadoop$host 采集flume-------"
+                ssh hadoop$host "ps -ef | grep file-flume-kafka | grep -v grep |awk  '{print \$2}' | xargs -n1 kill -9 "
+        done
+
+};;
+esac
